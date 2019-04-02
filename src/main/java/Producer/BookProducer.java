@@ -8,11 +8,11 @@ package Producer;
 import BL.Book;
 import Queue.FullException;
 import Queue.Queue;
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -34,22 +34,30 @@ public class BookProducer extends Thread {
 
     @Override
     public void run() {
-        int rueckgabeWert = chooser.showOpenDialog(null);
-        if (rueckgabeWert == JFileChooser.APPROVE_OPTION) {
-            f = chooser.getSelectedFile();
-        }
-
-        try {
-            ObjectInputStream oos = new ObjectInputStream(new FileInputStream(f));
-
-            text = oos.readUTF();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(BookProducer.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(BookProducer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
         while (true) {
+
+            int rueckgabeWert = chooser.showOpenDialog(null);
+            if (rueckgabeWert == JFileChooser.APPROVE_OPTION) {
+                f = chooser.getSelectedFile();
+            }
+
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(f));
+                StringBuilder sb = new StringBuilder();
+                String line = br.readLine();
+
+                while (line != null) {
+                    sb.append(line);
+                    sb.append("\n");
+                    line = br.readLine();
+                }
+                
+                text = br.toString();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(BookProducer.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(BookProducer.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             synchronized (books) {
                 try {
