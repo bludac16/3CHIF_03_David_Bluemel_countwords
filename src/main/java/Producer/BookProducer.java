@@ -34,12 +34,13 @@ public class BookProducer extends Thread {
 
     @Override
     public void run() {
+        int rueckgabeWert = chooser.showOpenDialog(null);
+        if (rueckgabeWert == JFileChooser.APPROVE_OPTION) {
+            f = chooser.getSelectedFile();
+        } else {
+            chooser.cancelSelection();
+        }
         while (true) {
-
-            int rueckgabeWert = chooser.showOpenDialog(null);
-            if (rueckgabeWert == JFileChooser.APPROVE_OPTION) {
-                f = chooser.getSelectedFile();
-            }
 
             try {
                 BufferedReader br = new BufferedReader(new FileReader(f));
@@ -51,7 +52,7 @@ public class BookProducer extends Thread {
                     sb.append("\n");
                     line = br.readLine();
                 }
-                
+
                 text = br.toString();
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(BookProducer.class.getName()).log(Level.SEVERE, null, ex);

@@ -9,8 +9,9 @@ import BL.Book;
 import Consumer.BookConsumer;
 import Producer.BookProducer;
 import Queue.Queue;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -26,7 +27,7 @@ public class BookGUI extends javax.swing.JFrame {
 
     }
 
-    Queue<Book> queue = new Queue<>(5);
+    Queue<Book> queue = new Queue<>(1000000);
 
     BookProducer prod1 = new BookProducer(queue);
     BookConsumer cons1 = new BookConsumer(queue);
@@ -77,8 +78,13 @@ public class BookGUI extends javax.swing.JFrame {
 
         new Thread(prod1, "Producer 1").start();
         new Thread(cons1, "Consumer 1").start();
+        try {
+            prod1.join();
+            cons1.join();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BookGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-        btStart.enable(false);
     }//GEN-LAST:event_btStartActionPerformed
 
     private void btUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUpdateActionPerformed
