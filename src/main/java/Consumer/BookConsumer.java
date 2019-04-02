@@ -11,14 +11,16 @@ import Queue.Queue;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author David
  */
-public class BookConsumer extends Thread{
+public class BookConsumer extends Thread {
+
     private Queue<Book> books;
-    private HashMap<String,Integer> dupWords = new HashMap<String,Integer>();
+    private HashMap<String, Integer> dupWords = new HashMap<String, Integer>();
 
     public BookConsumer(Queue<Book> books) {
         this.books = books;
@@ -26,9 +28,9 @@ public class BookConsumer extends Thread{
 
     @Override
     public void run() {
-        while(true){
+        while (true) {
             Book book = null;
-            synchronized(books){
+            synchronized (books) {
                 try {
                     book = books.get();
                     books.notifyAll();
@@ -40,7 +42,7 @@ public class BookConsumer extends Thread{
                     }
                     continue;
                 }
-                
+
             }
             try {
                 Thread.sleep(3000);
@@ -54,5 +56,5 @@ public class BookConsumer extends Thread{
     public HashMap<String, Integer> getDupWords() {
         return dupWords;
     }
-    
+
 }

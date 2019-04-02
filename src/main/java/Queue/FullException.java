@@ -9,6 +9,6 @@ package Queue;
  *
  * @author David
  */
-public class FullException extends Exception{
-    
+public class FullException extends Exception {
+
 }

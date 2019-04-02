@@ -17,6 +17,7 @@ import java.util.Set;
  * @author David
  */
 public class Book {
+
     private String inputName;
     private String text;
 
@@ -24,16 +25,16 @@ public class Book {
         this.inputName = inputName;
         this.text = text;
     }
-    
-    public HashMap<String,Integer> duplicateWords(){
+
+    public HashMap<String, Integer> duplicateWords() {
         List<String> list = Arrays.asList(text.split(" "));
         Set<String> uniqueWords = new HashSet<String>(list);
-        
-        HashMap<String,Integer> words = new HashMap<String,Integer>();
-        
+
+        HashMap<String, Integer> words = new HashMap<String, Integer>();
+
         for (String word : uniqueWords) {
-            if(Collections.frequency(list,word) > 1){
-                words.put(word, Collections.frequency(list,word));
+            if (Collections.frequency(list, word) > 1) {
+                words.put(word, Collections.frequency(list, word));
             }
         }
         return words;

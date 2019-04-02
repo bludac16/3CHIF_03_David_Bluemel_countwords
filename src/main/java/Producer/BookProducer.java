@@ -21,8 +21,8 @@ import javax.swing.JFileChooser;
  *
  * @author David
  */
-public class BookProducer extends Thread{
-    
+public class BookProducer extends Thread {
+
     private final Queue<Book> books;
     private File f;
     private String text;
@@ -34,25 +34,24 @@ public class BookProducer extends Thread{
 
     @Override
     public void run() {
-        while(true){
-            int rueckgabeWert = chooser.showOpenDialog(null);
-            if(rueckgabeWert == JFileChooser.APPROVE_OPTION)
-            {
-                f = chooser.getSelectedFile();
-            }
-            try {
-                ObjectInputStream oos = new ObjectInputStream(new FileInputStream(f));
-                
-                text = (String) oos.readObject();
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(BookProducer.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(BookProducer.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(BookProducer.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            synchronized(books){
+        int rueckgabeWert = chooser.showOpenDialog(null);
+        if (rueckgabeWert == JFileChooser.APPROVE_OPTION) {
+            f = chooser.getSelectedFile();
+        }
+
+        try {
+            ObjectInputStream oos = new ObjectInputStream(new FileInputStream(f));
+
+            text = oos.readUTF();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(BookProducer.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(BookProducer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        while (true) {
+
+            synchronized (books) {
                 try {
                     books.put(new Book(f.getName(), text));
                     books.notifyAll();
@@ -67,5 +66,5 @@ public class BookProducer extends Thread{
             }
         }
     }
-    
+
 }
