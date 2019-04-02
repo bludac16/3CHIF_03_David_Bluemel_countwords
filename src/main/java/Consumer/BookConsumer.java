@@ -8,6 +8,7 @@ package Consumer;
 import BL.Book;
 import Queue.EmptyException;
 import Queue.Queue;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,6 +18,7 @@ import java.util.logging.Logger;
  */
 public class BookConsumer extends Thread{
     private Queue<Book> books;
+    private HashMap<String,Integer> dupWords = new HashMap<String,Integer>();
 
     public BookConsumer(Queue<Book> books) {
         this.books = books;
@@ -36,11 +38,21 @@ public class BookConsumer extends Thread{
                     } catch (InterruptedException ex1) {
                         Logger.getLogger(BookConsumer.class.getName()).log(Level.SEVERE, null, ex1);
                     }
-                    
-                    Logger.getLogger(BookConsumer.class.getName()).log(Level.SEVERE, null, ex);
+                    continue;
                 }
+                
             }
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(BookConsumer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            dupWords = book.duplicateWords();
         }
+    }
+
+    public HashMap<String, Integer> getDupWords() {
+        return dupWords;
     }
     
 }
